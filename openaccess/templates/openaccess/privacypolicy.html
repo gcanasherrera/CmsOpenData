@@ -1,0 +1,24 @@
+{% extends "openaccess/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<section class="infobar">
+<div class="container">
+  <h3>Privacy Policy</h3>
+</div>
+<div class="container">
+     <div class="row">
+          <div class="col-md-10">
+               <div class="body">
+                    <p>CMS OpenData Portal at ifca.es meets the CERN OpenData Portal <a href="http://http://opendata.cern.ch/privacy-policy">privacy policy</a>.<p>
+                    {% comment %}<p>IFCA does not track, collect or retain personal information from users of CMS OpenData Portal, except as otherwise provided herein. In order to enhance CMS OpenData Portal at IFCA and monitor traffic, non-personal information such as IP addresses and cookies may be tracked and retained, as well as log files shared in aggregation with other community services. User provided information, like corrections of metadata or paper claims, will be integrated into the database without displaying its source and may shared with other services.</p>
+                    <p>CMS OpenData Portal will take all reasonable measures to protect the privacy of its users and to resist service interruptions, intentional attacks, or other events that may compromise the security of the CMS OpenData Portal website.</p>{% endcomment %}
+               </div>
+          </div>
+     </div>
+</div>
+</section>
+
+{% endblock %}

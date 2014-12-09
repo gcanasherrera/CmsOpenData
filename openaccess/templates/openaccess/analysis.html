@@ -1,0 +1,37 @@
+{% extends "openaccess/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<section>
+    <div class="container">
+        <div class="gateone-container">
+            <div id="gateone" />
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ gateone_url }}/static/gateone.js"></script>
+<script>
+
+$( document ).ready(function() {
+    authobj = {{ gateone_auth_obj | safe }};
+    GateOne.init({url: "{{ gateone_url }}", 
+                  embedded: false,
+                  disableTermTransitions:true,
+                  showTitle: true,
+                  showToolbar: true,
+                  fillContainer: true,
+                  theme: "solarized",
+                  autoConnectURL: "{{ gateone_connect_url | safe }}",
+                  auth: authobj});
+    GateOne.prefs.autoConnectURL = "{{ gateone_connect_url | safe }}";
+}); 
+</script>
+{% endblock %}
+
+

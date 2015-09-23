@@ -1,0 +1,58 @@
+{% extends "openaccess/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+
+<section>
+    <div class="container">
+        <h3>SSH access</h3>
+        
+        <div class="intro-text">
+            <span class="skills"> <p>
+            Login directly with ssh to the analsys environment by uploading a
+            public ssh key in the form below.
+            </p> </span>
+            <span>
+            <p>Then connect to cmsopendata.ifca.es as user {{ profile.username }}:</p></span>
+            <div class="text-center"><p>ssh -i &lt;yourkey&gt; {{ profile.username }}@cmsopendata.ifca.es</p></div>
+            </span>
+        </div>
+        <div>
+            <h4>Public keys</h4>
+            <p>Enter all the public keys you want the server to accept (one per line) and then save</p>
+            <form action="" method="post">
+            {% csrf_token %}
+            <p class="small">
+            {{ form }}
+            </p>
+            <input class="btn btn-success btn-lg" type="submit" value="Save" />
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ gateone_url }}/static/gateone.js"></script>
+<script>
+
+$( document ).ready(function() {
+    authobj = {{ gateone_auth_obj | safe }};
+    GateOne.init({url: "{{ gateone_url }}", 
+                  embedded: false,
+                  disableTermTransitions:true,
+                  showTitle: true,
+                  showToolbar: true,
+                  fillContainer: true,
+                  theme: "solarized",
+                  autoConnectURL: "{{ gateone_connect_url | safe }}",
+                  auth: authobj});
+    GateOne.prefs.autoConnectURL = "{{ gateone_connect_url | safe }}";
+}); 
+</script>
+{% endblock %}
+
+

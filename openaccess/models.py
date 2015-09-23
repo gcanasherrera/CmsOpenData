@@ -12,6 +12,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     key = models.TextField()
     username = models.CharField(max_length=20)
+    extra_keys = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return self.username
@@ -48,6 +49,23 @@ class UserProfile(models.Model):
     def get_public_key(self):
         key = RSA.importKey(self.key) 
         return key.exportKey('OpenSSH')
+
+    def update_ssh_keys(self):
+        # this is ugly as it gets, but it's the easier way right now
+        ssh_client = paramiko.SSHClient()
+        ssh_client.load_system_host_keys('/etc/ssh/ssh_known_hosts')
+        ssh_port = getattr(settings, 'OPENACCESS_ANALYSIS_SSH_PORT', 22)
+        ssh_user = getattr(settings, 'OPENACCESS_ANALYSIS_SSH_USER', 'root')
+        ssh_cmd = getattr(settings, 'OPENACCESS_ANALYSIS_SSH_CMD',
+                          '/var/cmsopendata/update_ssh_keys.sh')
+        updated_keys = '\n'.join([self.get_public_key(), self.extra_keys])
+        cmd_line = '%s %s "%s"' % (ssh_cmd, self.username, updated_keys) 
+        ssh_client.connect(settings.OPENACCESS_ANALYSIS_SSH_HOST,
+                           port=ssh_port, username=ssh_user,
+                           key_filename=settings.OPENACCESS_ANALYSIS_SSH_KEY)
+        channel = ssh_client.get_transport().open_session()
+        channel.exec_command(cmd_line)
+        status = channel.recv_exit_status()        
 
     def _create_remote_user(self):
         # this should be as async as possible

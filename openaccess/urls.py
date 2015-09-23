@@ -20,4 +20,5 @@ urlpatterns = patterns('',
         TemplateView.as_view(template_name="openaccess/contact.html"),
         name='contact'),
     url(r'^Analysis$', views.AnalysisView.as_view(), name='analysis'),
+    url(r'^ssh-access$', views.SSHView.as_view(), name='ssh'),
 )

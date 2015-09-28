@@ -1,10 +1,11 @@
-
 import json
 import time
 import hmac
 from hashlib import sha1
 
 from django.conf import settings
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'epl.settings')
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
@@ -82,3 +83,10 @@ class SSHView(LoginRequiredMixin, FormView):
         profile.save()
         profile.update_ssh_keys()
         return super(SSHView, self).form_valid(form)
+
+class OntologyView(LoginRequiredMixin, FormView):
+    template_name = 'openaccess/Ontology.html'
+    form_class = OntologyForm
+
+
+
